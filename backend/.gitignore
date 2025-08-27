@@ -1,0 +1,8 @@
+/target/
+
+# Ignore IDE specific files
+.idea/
+*.iml
+.settings/
+.vscode/*
+.DS_Store
