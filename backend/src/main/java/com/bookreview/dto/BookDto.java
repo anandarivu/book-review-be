@@ -14,4 +14,5 @@ public class BookDto {
     private Set<String> genres;
     private Integer publishedYear;
     private Double averageRating;
+    private Integer reviewCount;
 }

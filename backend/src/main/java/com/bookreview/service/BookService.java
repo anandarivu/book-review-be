@@ -38,6 +38,7 @@ public class BookService {
                 .map(book -> {
                     var dto = bookMapper.toDto(book);
                     dto.setAverageRating(reviewService.getAverageRating(book.getId()));
+                    dto.setReviewCount((int) reviewService.getReviewsForBook(book.getId(), 0, Integer.MAX_VALUE, "date").getTotalElements());
                     return dto;
                 })
                 .toList();
@@ -90,6 +91,7 @@ public class BookService {
         return bookRepository.findById(id).map(book -> {
             var dto = bookMapper.toDto(book);
             dto.setAverageRating(reviewService.getAverageRating(book.getId()));
+            dto.setReviewCount((int) reviewService.getReviewsForBook(book.getId(), 0, Integer.MAX_VALUE, "date").getTotalElements());
             return dto;
         });
     }
@@ -106,6 +108,7 @@ public class BookService {
         return books.map(book -> {
             var dto = bookMapper.toDto(book);
             dto.setAverageRating(reviewService.getAverageRating(book.getId()));
+            dto.setReviewCount((int) reviewService.getReviewsForBook(book.getId(), 0, Integer.MAX_VALUE, "date").getTotalElements());
             return dto;
         });
     }

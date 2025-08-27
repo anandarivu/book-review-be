@@ -137,6 +137,9 @@ class BookServiceTest {
     when(bookRepository.findById(uuid)).thenReturn(Optional.of(book));
     when(bookMapper.toDto(any(Book.class))).thenReturn(dummyDto);
     when(reviewService.getAverageRating(any())).thenReturn(4.5);
+    // Mock getReviewsForBook to return a non-null Page
+    org.springframework.data.domain.Page<com.bookreview.dto.ReviewDto> dummyPage = org.springframework.data.domain.Page.empty();
+    when(reviewService.getReviewsForBook(any(), anyInt(), anyInt(), anyString())).thenReturn(dummyPage);
     Optional<com.bookreview.dto.BookDto> found = bookService.getBook(uuid);
     assertTrue(found.isPresent());
     }
@@ -151,15 +154,19 @@ class BookServiceTest {
 
     @Test
     void searchBooks_shouldReturnBooks() {
-        when(bookRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
-        org.springframework.data.domain.Page<com.bookreview.dto.BookDto> page = bookService.searchBooks(null, 0, 20, "title");
-        assertNotNull(page);
+    when(bookRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
+    // Mock getReviewsForBook to return a non-null Page
+    when(reviewService.getReviewsForBook(any(), anyInt(), anyInt(), anyString())).thenReturn(org.springframework.data.domain.Page.empty());
+    org.springframework.data.domain.Page<com.bookreview.dto.BookDto> page = bookService.searchBooks(null, 0, 20, "title");
+    assertNotNull(page);
     }
 
     @Test
     void getTopRatedBooks_shouldReturnSortedBooks() {
-        when(bookRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
-        org.springframework.data.domain.Page<com.bookreview.dto.BookDto> page = bookService.getTopRatedBooks(0, 20);
-        assertNotNull(page);
+    when(bookRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
+    // Mock getReviewsForBook to return a non-null Page
+    when(reviewService.getReviewsForBook(any(), anyInt(), anyInt(), anyString())).thenReturn(org.springframework.data.domain.Page.empty());
+    org.springframework.data.domain.Page<com.bookreview.dto.BookDto> page = bookService.getTopRatedBooks(0, 20);
+    assertNotNull(page);
     }
 }

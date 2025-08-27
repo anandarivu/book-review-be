@@ -58,6 +58,11 @@ const BookCard: React.FC<BookCardProps> = ({
         <Typography color="primary" fontWeight={700}>
           {book.averageRating ? book.averageRating.toFixed(1) : 'N/A'}
         </Typography>
+        {book.reviewCount > 0 && (
+          <Typography color="gray" fontWeight={500} sx={{ ml: 1, fontSize: 14 }}>
+            ({book.reviewCount} reviews)
+          </Typography>
+        )}
       </Box>
       <Typography variant="body2" color="white" gutterBottom>
         by <span style={{ fontWeight: 500 }}>{book.author}</span> in <span style={{ fontWeight: 500 }}>{book.publishedYear}</span>

@@ -50,8 +50,16 @@ const Profile: React.FC = () => {
     ])
       .then(([profileRes, favoritesRes, topRatedRes]) => {
         setProfile(profileRes.data);
-        setFavorites(favoritesRes.data);
-        setRecommendations(topRatedRes.data.content || topRatedRes.data);
+        const recs = topRatedRes.data.content || topRatedRes.data;
+        setRecommendations(recs);
+        // Add reviewCount and averageRating to favorites from recommendations if available
+        const favsWithRatings = favoritesRes.data.map((fav: any) => {
+          const rec = recs.find((r: any) => r.id === fav.id);
+          return rec
+            ? { ...fav, reviewCount: rec.reviewCount, averageRating: rec.averageRating }
+            : fav;
+        });
+        setFavorites(favsWithRatings);
         setLoading(false);
       })
       .catch((err) => {
