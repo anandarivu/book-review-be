@@ -90,7 +90,8 @@ public class ReviewService {
     }
 
     public Page<com.bookreview.dto.ReviewDto> getReviewsForUser(String userId, int page, int size, String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Sort sort = Sort.by(Sort.Direction.DESC, "lastModifiedAt");
+        Pageable pageable = PageRequest.of(page, size, sort);
         return reviewRepository.findByUserIdAndDeletedFalse(userId, pageable)
             .map(reviewMapper::toDto);
     }

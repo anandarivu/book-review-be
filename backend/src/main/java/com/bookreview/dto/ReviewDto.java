@@ -14,4 +14,5 @@ public class ReviewDto {
     private int rating;
     private String createdAt;
     private String updatedAt;
+    private BookDto book;
 }

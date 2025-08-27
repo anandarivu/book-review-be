@@ -1,4 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
+import dayjs from 'dayjs';
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -41,7 +42,7 @@ const BookDetails: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [book, setBook] = useState<Record<string, any> | null>(null);
-  const [reviews, setReviews] = useState<Array<{ id: string; title: string; reviewText: string; rating: number; userUuid: string; userId: string;}>>([]);
+  const [reviews, setReviews] = useState<Array<{ id: string; title: string; reviewText: string; rating: number; userUuid: string; userId: string; createdAt?: string; updatedAt?: string }>>([]);
   const paginatedReviews = reviews.slice((reviewsPage - 1) * REVIEWS_PER_PAGE, reviewsPage * REVIEWS_PER_PAGE);
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewText, setReviewText] = useState('');
@@ -233,6 +234,9 @@ const BookDetails: React.FC = () => {
                         <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
                           <Typography variant="caption" color="gray">
                             {review.userId}
+                          </Typography>
+                          <Typography variant="caption" color="gray" sx={{ ml: 2 }}>
+                            {review.updatedAt ? dayjs(review.updatedAt).format('MMM D, YYYY h:mm A') : ''}
                           </Typography>
                           {isMine && (
                             <Box display="flex" gap={1}>

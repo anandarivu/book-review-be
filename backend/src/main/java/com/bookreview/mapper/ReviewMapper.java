@@ -15,6 +15,9 @@ public abstract class ReviewMapper {
     @Mapping(source = "book.id", target = "bookId")
     @Mapping(source = "userId", target = "userId")
     @Mapping(target = "userUuid", expression = "java(getUserUuid(review.getUserId()))")
+    @Mapping(target = "book", expression = "java(bookMapper.toDto(review.getBook()))")
+    @Mapping(target = "updatedAt", expression = "java(review.getLastModifiedAt() != null ? review.getLastModifiedAt().toString() : null)")
+    @Mapping(target = "createdAt", expression = "java(review.getCreatedAt() != null ? review.getCreatedAt().toString() : null)")
     public abstract ReviewDto toDto(Review review);
 
     public java.util.UUID getUserUuid(String userId) {
@@ -23,5 +26,11 @@ public abstract class ReviewMapper {
             .orElse(null);
     }
 
+    @Mapping(target = "date", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "book.reviews", ignore = true)
     public abstract Review toEntity(ReviewDto dto);
+
+    @Autowired
+    protected com.bookreview.mapper.BookMapper bookMapper;
 }
