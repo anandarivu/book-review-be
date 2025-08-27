@@ -1,5 +1,4 @@
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
