@@ -31,6 +31,18 @@ public class ReviewController {
         return ResponseEntity.ok(review);
     }
 
+        @GetMapping("/user/me")
+        @PreAuthorize("isAuthenticated()")
+        public ResponseEntity<Page<com.bookreview.dto.ReviewDto>> getReviewsForCurrentUser(
+                @RequestHeader("Authorization") String authHeader,
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "20") int size,
+                @RequestParam(defaultValue = "date") String sortBy) {
+            String token = authHeader.replace("Bearer ", "");
+            String userId = jwtUtil.getUserId(token);
+            Page<com.bookreview.dto.ReviewDto> reviews = reviewService.getReviewsForUser(userId, page, size, sortBy);
+            return ResponseEntity.ok(reviews);
+        }
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<com.bookreview.dto.ReviewDto> updateReview(@PathVariable UUID id, @RequestBody ReviewRequest request,

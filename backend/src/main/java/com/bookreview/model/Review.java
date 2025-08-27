@@ -7,11 +7,24 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "reviews")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Review extends Auditable {
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", reviewText='" + reviewText + '\'' +
+                ", rating=" + rating +
+                ", date=" + date +
+                ", userId='" + userId + '\'' +
+                ", deleted=" + deleted +
+                '}';
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
@@ -37,5 +50,6 @@ public class Review extends Auditable {
     private String userId; // The user who wrote the review
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean deleted = false;
 }

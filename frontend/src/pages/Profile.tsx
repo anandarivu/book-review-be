@@ -7,12 +7,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getTopRatedBooks } from '../api/books';
 import { getFavorites, removeFavorite, addFavorite } from '../api/favorites';
+import { getReviewsForCurrentUser } from '../api/reviews';
 import { getProfile } from '../api/profile';
 import BookCard from '../components/BookCard';
 import Navbar from '../components/Navbar';
 import { handleJwtExpired } from '../utils/session';
 
 const Profile: React.FC = () => {
+  const [reviewsPage, setReviewsPage] = useState(1);
+  const reviewsPerPage = 5;
+  const [userReviews, setUserReviews] = useState<any[]>([]);
   // Add favorite for recommendations
   const handleAddFavorite = async (bookId: string) => {
     await addFavorite(bookId);
@@ -46,9 +50,15 @@ const Profile: React.FC = () => {
           handleJwtExpired(navigate);
         }
         throw err;
+      }),
+      getReviewsForCurrentUser().catch(err => {
+        if (err?.response?.status === 401) {
+          handleJwtExpired(navigate);
+        }
+        throw err;
       })
     ])
-      .then(([profileRes, favoritesRes, topRatedRes]) => {
+      .then(([profileRes, favoritesRes, topRatedRes, userReviewsRes]) => {
         setProfile(profileRes.data);
         const recs = topRatedRes.data.content || topRatedRes.data;
         setRecommendations(recs);
@@ -60,6 +70,7 @@ const Profile: React.FC = () => {
             : fav;
         });
         setFavorites(favsWithRatings);
+  setUserReviews(userReviewsRes.data.content || userReviewsRes.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -74,7 +85,7 @@ const Profile: React.FC = () => {
 
   if (loading || !profile)
     return (
-      <Box display="flex" alignItems="center" justifyContent="center" minHeight="60vh">
+      <Box minHeight="100vh" sx={{ backgroundColor: 'black', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <CircularProgress color="error" />
       </Box>
     );
@@ -83,6 +94,51 @@ const Profile: React.FC = () => {
     <Box minHeight="100vh" sx={{ backgroundColor: 'black' }}>
       <Navbar username={profile.username} />
       <Box maxWidth="lg" mx="auto" py={10} px={4}>
+        {/* My Reviews Section */}
+        <Box mb={8}>
+          <Typography variant="h4" fontWeight={900} color="error" align="left" gutterBottom>
+            My Reviews
+          </Typography>
+          {userReviews.length === 0 ? (
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="200px" border="2px dashed #e50914" borderRadius={4} bgcolor="#181818" sx={{ boxShadow: 8 }}>
+              <StarBorderIcon sx={{ fontSize: 40, color: 'white', mb: 2 }} />
+              <Typography variant="h6" color="error" fontWeight={700} gutterBottom>
+                No reviews yet
+              </Typography>
+              <Typography variant="body2" color="gray" align="center">
+                You haven't written any reviews yet.
+              </Typography>
+            </Box>
+          ) : (
+            <Box>
+              {userReviews.slice((reviewsPage - 1) * reviewsPerPage, reviewsPage * reviewsPerPage).map((review: any) => (
+                <Box key={review.id} mb={3} p={2} bgcolor="#222" borderRadius={3} boxShadow={2}>
+                  <Typography variant="subtitle1" color="error" fontWeight={700} gutterBottom>
+                    {review.title}
+                  </Typography>
+                  <Typography variant="body2" color="white" gutterBottom>
+                    {review.reviewText}
+                  </Typography>
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Typography color="gray">Book: {review.bookTitle || review.bookId}</Typography>
+                    <Typography color="gray">Rating: {review.rating}</Typography>
+                  </Box>
+                </Box>
+              ))}
+              {userReviews.length > reviewsPerPage && (
+                <Box display="flex" justifyContent="center" mt={2}>
+                  <Pagination
+                    count={Math.ceil(userReviews.length / reviewsPerPage)}
+                    page={reviewsPage}
+                    onChange={(_event: React.ChangeEvent<unknown>, value: number) => setReviewsPage(value)}
+                    color="primary"
+                  />
+                </Box>
+              )}
+            </Box>
+          )}
+        </Box>
+        {/* Favorites Section */}
         <Box display="flex" alignItems="center" mb={4}>
           <Typography variant="h4" fontWeight={900} color="error" align="left" gutterBottom>
             Favorites
@@ -125,6 +181,7 @@ const Profile: React.FC = () => {
             )}
           </>
         )}
+        {/* Recommendations Section */}
         <Box mt={8} mb={4}>
           <Typography variant="h4" fontWeight={900} color="error" align="left" gutterBottom>
             Recommendations

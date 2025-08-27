@@ -7,11 +7,24 @@ import java.util.Set;
 
 @Entity
 @Table(name = "books")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Book extends Auditable {
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", description='" + description + '\'' +
+                ", coverImageUrl='" + coverImageUrl + '\'' +
+                ", genres=" + genres +
+                ", publishedYear=" + publishedYear +
+                '}';
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

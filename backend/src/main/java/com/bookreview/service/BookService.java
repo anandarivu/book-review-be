@@ -127,7 +127,7 @@ public class BookService {
         if (request.getAuthor().length() > 64 || request.getAuthor().length() < 1) {
             throw new RuntimeException("Author length must be 1-64 characters");
         }
-        if (request.getDescription().length() > 512 || request.getDescription().length() < 1) {
+        if (request.getDescription().length() > 4096 || request.getDescription().length() < 1) {
             throw new RuntimeException("Description length must be 1-512 characters");
         }
         if (request.getCoverImageUrl().length() > 256 || request.getCoverImageUrl().length() < 1) {
