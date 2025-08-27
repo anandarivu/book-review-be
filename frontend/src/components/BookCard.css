@@ -1,0 +1,8 @@
+.book-card-hover {
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.book-card-hover:hover {
+  transform: scale(1.10);
+  box-shadow: 0 12px 40px 0 rgba(229,9,20,0.45);
+  z-index: 10;
+}

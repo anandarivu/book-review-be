@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Box, Typography, Button, IconButton, Rating } from '@mui/material';
+import './BookCard.css';
 import { Link } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -24,7 +25,20 @@ const BookCard: React.FC<BookCardProps> = ({
   showDelete = false,
   showViewDetails = true,
 }) => (
-  <Card sx={{ bgcolor: '#181818', border: '2px solid #e50914', borderRadius: 3, boxShadow: 8, width: 260, height: 420, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+  <Card
+    className="book-card-hover"
+    sx={{
+      bgcolor: '#181818',
+      border: '2px solid #e50914',
+      borderRadius: 3,
+      boxShadow: 8,
+      width: 260,
+      height: 420,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+    }}
+  >
     {book.coverImageUrl && (
       <CardMedia
         component="img"
