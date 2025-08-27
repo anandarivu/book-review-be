@@ -64,6 +64,19 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
+
+    @GetMapping("/recommendations")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Page<BookDto>> getRecommendations(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        String token = authHeader.replace("Bearer ", "");
+        String userId = bookService.getJwtUtil().getUserId(token);
+        Page<BookDto> books = bookService.getRecommendations(userId, page, size);
+        return ResponseEntity.ok(books);
+    }
+
     @GetMapping("/top-rated")
     public ResponseEntity<Page<BookDto>> getTopRatedBooks(
             @RequestParam(defaultValue = "0") int page,

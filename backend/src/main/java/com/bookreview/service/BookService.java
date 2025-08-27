@@ -17,6 +17,50 @@ import java.util.Optional;
 @Service
 public class BookService {
     @Autowired
+    private com.bookreview.util.JwtUtil jwtUtil;
+
+    @Autowired
+    private com.bookreview.service.FavoriteService favoriteService;
+
+    @Autowired
+    private com.bookreview.repository.UserRepository userRepository;
+
+    public com.bookreview.util.JwtUtil getJwtUtil() {
+        return jwtUtil;
+    }
+
+    public Page<com.bookreview.dto.BookDto> getRecommendations(String userId, int page, int size) {
+        // Get user's favorite books
+        var favorites = favoriteService.getFavorites(userId);
+        java.util.Set<String> genres = new java.util.HashSet<>();
+        for (var book : favorites) {
+            if (book.getGenres() != null) genres.addAll(book.getGenres());
+        }
+        // If no favorites, get genres from user profile (if available)
+        if (genres.isEmpty()) {
+            var userOpt = userRepository.findByUserId(userId);
+            if (userOpt.isPresent()) {
+                var user = userOpt.get();
+                for (var book : user.getFavorites()) {
+                    if (book.getGenres() != null) genres.addAll(book.getGenres());
+                }
+            }
+        }
+        // Find books matching these genres, excluding already favorited books
+        var allBooks = bookRepository.findAll();
+        var recommended = allBooks.stream()
+            .filter(book -> genres.stream().anyMatch(g -> book.getGenres().contains(g)))
+            .filter(book -> !favorites.contains(book))
+            .map(bookMapper::toDto)
+            .toList();
+        int total = recommended.size();
+        int fromIndex = Math.min(page * size, total);
+        int toIndex = Math.min(fromIndex + size, total);
+        var pagedBooks = recommended.subList(fromIndex, toIndex);
+        Pageable pageable = PageRequest.of(page, size);
+        return new org.springframework.data.domain.PageImpl<>(pagedBooks, pageable, total);
+    }
+    @Autowired
     private ReviewService reviewService;
     @Autowired
     private com.bookreview.mapper.BookMapper bookMapper;

@@ -40,7 +40,7 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [favPage, setFavPage] = useState(1);
   const [recPage, setRecPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 2;
 
   const [editReview, setEditReview] = useState<any>(null);
   const [editOpen, setEditOpen] = useState(false);
