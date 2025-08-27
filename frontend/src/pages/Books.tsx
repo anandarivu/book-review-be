@@ -69,7 +69,7 @@ return (
       <Navbar username={username} />
       <Box maxWidth="lg" mx="auto" py={10} px={4}>
         <Box display="flex" alignItems="center" justifyContent="space-between" mb={4}>
-          <Typography variant="h3" fontWeight={900} color="error" sx={{ textAlign: 'left' }}>
+          <Typography variant="h3" fontWeight={900} color="error" sx={{ textAlign: 'left', fontSize: '2.25rem' }}>
             Book Library
           </Typography>
           <TextField
