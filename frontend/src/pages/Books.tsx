@@ -21,7 +21,6 @@ const Books: React.FC = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [page, setPage] = useState(0);
   const itemsPerPage = 8;
-  const searchTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const username = localStorage.getItem('username') || '';
 
   useEffect(() => {
