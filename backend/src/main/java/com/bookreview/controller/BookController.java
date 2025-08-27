@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/books")
 public class BookController {
     @Autowired
+    private com.bookreview.service.LLMRecommendationService llmRecommendationService;
+    @Autowired
     private ReviewService reviewService;
     @Autowired
     private BookService bookService;
@@ -78,10 +80,22 @@ public class BookController {
     }
 
     @GetMapping("/top-rated")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Page<BookDto>> getTopRatedBooks(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         Page<BookDto> books = bookService.getTopRatedBooks(page, size);
+        return ResponseEntity.ok(books);
+    }
+
+
+    @GetMapping("/llm-recommendations")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<java.util.List<BookDto>> getLLMRecommendations(
+            @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String userId = bookService.getJwtUtil().getUserId(token);
+        java.util.List<BookDto> books = llmRecommendationService.getRecommendations(userId);
         return ResponseEntity.ok(books);
     }
 }

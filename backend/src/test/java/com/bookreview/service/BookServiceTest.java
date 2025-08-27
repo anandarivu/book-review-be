@@ -9,9 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,8 +31,7 @@ class BookServiceTest {
     }
     @Mock
     private BookRepository bookRepository;
-    @Mock
-    private com.bookreview.mapper.BookMapper bookMapper;
+    private com.bookreview.mapper.BookMapper bookMapper = org.mapstruct.factory.Mappers.getMapper(com.bookreview.mapper.BookMapper.class);
     @Mock
     private ReviewService reviewService;
     @InjectMocks
@@ -42,6 +39,7 @@ class BookServiceTest {
 
     public BookServiceTest() {
         MockitoAnnotations.openMocks(this);
+        bookService.bookMapper = bookMapper;
     }
 
     @Test
@@ -54,26 +52,13 @@ class BookServiceTest {
     request.setGenres(Set.of("Fiction"));
     request.setPublishedYear(2020);
 
-    Book book = Book.builder()
-        .id(java.util.UUID.randomUUID())
-        .title("Title")
-        .author("Author")
-        .description("Desc")
-        .coverImageUrl("http://img.com")
-        .genres(Set.of("Fiction"))
-        .publishedYear(2020)
-        .build();
-    when(bookRepository.save(any(Book.class))).thenReturn(book);
+    // Fix: Use any(Book.class) so the mock matches the service's Book instance
+    when(bookRepository.save(any(Book.class))).thenAnswer(invocation -> {
+        Book b = invocation.getArgument(0);
+        b.setId(java.util.UUID.randomUUID());
+        return b;
+    });
 
-    com.bookreview.dto.BookDto dummyDto = new com.bookreview.dto.BookDto();
-    dummyDto.setId(book.getId());
-    dummyDto.setTitle(book.getTitle());
-    dummyDto.setAuthor(book.getAuthor());
-    dummyDto.setDescription(book.getDescription());
-    dummyDto.setCoverImageUrl(book.getCoverImageUrl());
-    dummyDto.setGenres(book.getGenres());
-    dummyDto.setPublishedYear(book.getPublishedYear());
-    when(bookMapper.toDto(any(Book.class))).thenReturn(dummyDto);
     com.bookreview.dto.BookDto created = bookService.createBook(request);
     assertNotNull(created.getId());
     assertEquals("Title", created.getTitle());
@@ -107,9 +92,8 @@ class BookServiceTest {
     request.setPublishedYear(2020);
     java.util.UUID uuid = java.util.UUID.randomUUID();
     Book book = Book.builder().id(uuid).build();
-    when(bookRepository.findById(any())).thenReturn(Optional.of(book));
-    when(bookRepository.save(any(Book.class))).thenReturn(book);
-    when(bookMapper.toDto(any(Book.class))).thenReturn(dummyDto);
+    when(bookRepository.findById(uuid)).thenReturn(Optional.of(book));
+    when(bookRepository.save(book)).thenReturn(book);
     com.bookreview.dto.BookDto updated = bookService.updateBook(uuid, request);
     assertNotNull(updated.getId());
     }
@@ -135,11 +119,10 @@ class BookServiceTest {
     java.util.UUID uuid = java.util.UUID.randomUUID();
     Book book = Book.builder().id(uuid).build();
     when(bookRepository.findById(uuid)).thenReturn(Optional.of(book));
-    when(bookMapper.toDto(any(Book.class))).thenReturn(dummyDto);
-    when(reviewService.getAverageRating(any())).thenReturn(4.5);
+    when(reviewService.getAverageRating(uuid)).thenReturn(4.5);
     // Mock getReviewsForBook to return a non-null Page
     org.springframework.data.domain.Page<com.bookreview.dto.ReviewDto> dummyPage = org.springframework.data.domain.Page.empty();
-    when(reviewService.getReviewsForBook(any(), anyInt(), anyInt(), anyString())).thenReturn(dummyPage);
+    when(reviewService.getReviewsForBook(uuid, 0, Integer.MAX_VALUE, "date")).thenReturn(dummyPage);
     Optional<com.bookreview.dto.BookDto> found = bookService.getBook(uuid);
     assertTrue(found.isPresent());
     }

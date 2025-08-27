@@ -63,7 +63,7 @@ public class BookService {
     @Autowired
     private ReviewService reviewService;
     @Autowired
-    private com.bookreview.mapper.BookMapper bookMapper;
+    com.bookreview.mapper.BookMapper bookMapper;
 
     public Page<com.bookreview.dto.BookDto> getTopRatedBooks(int page, int size) {
         // Fetch all books

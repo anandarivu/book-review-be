@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Grid, Pagination, FormControl, Select, MenuItem, InputLabel, CircularProgress } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import BookCard from '../components/BookCard';
-import { getSimilarBooksRecommendations } from '../api/recommendations';
+import { getSimilarBooksRecommendations, getLlmRecommendations } from '../api/recommendations';
 import { getTopRatedBooks } from '../api/books';
 
 const RecommendationsSection: React.FC<{
@@ -19,6 +19,8 @@ const RecommendationsSection: React.FC<{
   const [similarTotal, setSimilarTotal] = React.useState(0);
   const [topRatedBooks, setTopRatedBooks] = React.useState<any[]>([]);
   const [topRatedTotal, setTopRatedTotal] = React.useState(0);
+  const [llmBooks, setLlmBooks] = React.useState<any[]>([]);
+  const [llmTotal, setLlmTotal] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -40,12 +42,33 @@ const RecommendationsSection: React.FC<{
           setTopRatedTotal(res.data.totalElements || data.length);
         })
         .finally(() => setLoading(false));
+    } else if (recommendationType === 'llm' && llmBooks.length === 0) {
+      setLoading(true);
+      getLlmRecommendations()
+        .then(res => {
+          const data = res.data.content || res.data;
+          setLlmBooks(data);
+          setLlmTotal(data.length);
+        })
+        .finally(() => setLoading(false));
     }
   }, [recommendationType, recPage, itemsPerPage]);
 
   // Rendering logic
-  const booksToShow = recommendationType === 'similar' ? similarBooks : recommendationType === 'topRated' ? topRatedBooks : recommendations;
-  const totalBooks = recommendationType === 'similar' ? similarTotal : recommendationType === 'topRated' ? topRatedTotal : recommendations.length;
+  const booksToShow = recommendationType === 'llm'
+    ? llmBooks.slice((recPage - 1) * itemsPerPage, recPage * itemsPerPage)
+    : recommendationType === 'similar'
+      ? similarBooks
+      : recommendationType === 'topRated'
+        ? topRatedBooks
+        : recommendations;
+  const totalBooks = recommendationType === 'llm'
+    ? llmTotal
+    : recommendationType === 'similar'
+      ? similarTotal
+      : recommendationType === 'topRated'
+        ? topRatedTotal
+        : recommendations.length;
 
   return (
     <>
