@@ -27,3 +27,4 @@ replay_pid*
 .vscode/mcp.json
 backend/.classpath
 backend/.project
+.vscode/settings.json

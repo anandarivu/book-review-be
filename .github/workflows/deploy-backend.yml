@@ -31,11 +31,11 @@ jobs:
           scp -i ec2_key.pem -o StrictHostKeyChecking=no \
             backend/target/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app.jar
 
-      - name: Install Java on EC2
-        run: |
-          ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
-            ubuntu@${{ secrets.EC2_HOST }} \
-            'sudo apt update && sudo apt install -y openjdk-21-jre-headless'
+      # - name: Install Java on EC2
+      #   run: |
+      #     ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
+      #       ubuntu@${{ secrets.EC2_HOST }} \
+      #       'sudo apt update && sudo apt install -y openjdk-21-jre-headless'
 
       - name: Restart backend on EC2
         run: |
