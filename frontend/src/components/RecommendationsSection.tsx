@@ -108,7 +108,7 @@ const RecommendationsSection: React.FC<{
         <>
           <Grid container spacing={4}>
             {booksToShow.map((book: any) => (
-              <Grid item key={book.id} xs={12} sm={6} md={4} lg={3}>
+              <Box key={book.id} sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' }, p: 1 }}>
                 <BookCard
                   book={book}
                   isFavorite={favorites.some((fav: any) => fav.id === book.id)}
@@ -122,7 +122,7 @@ const RecommendationsSection: React.FC<{
                   showFavorite={true}
                   showViewDetails={true}
                 />
-              </Grid>
+              </Box>
             ))}
           </Grid>
           {totalBooks > itemsPerPage && (

@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
-import Grid from '@mui/material/Grid';
+import { Grid } from '@mui/material';
 // ...existing code...
 import { addFavorite, removeFavorite, getFavorites } from '../api/favorites';
 import Pagination from '@mui/material/Pagination';
@@ -141,7 +141,7 @@ return (
               </Box>
             ) : null}
             {books.length > 0 && books.slice(page * itemsPerPage, (page + 1) * itemsPerPage).map(book => (
-              <Grid item key={book.id} xs={12} sm={6} md={4} lg={3}>
+              <Box key={book.id} sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' }, p: 1 }}>
                 <BookCard
                   book={book}
                   isFavorite={favorites.includes(book.id)}
@@ -149,7 +149,7 @@ return (
                   showFavorite={true}
                   showViewDetails={true}
                 />
-              </Grid>
+              </Box>
             ))}
           </Grid>
         )}

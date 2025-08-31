@@ -16,7 +16,7 @@ interface BookListProps {
   setReviewsDialogOpen: (open: boolean) => void;
 }
 
-const BookList: React.FC<BookListProps> = ({ books, onEdit, onDelete, onOpenReviews, selectedBookId, reviewsDialogOpen, setReviewsDialogOpen }) => (
+const BookList: React.FC<BookListProps> = ({ books, onEdit, onDelete, selectedBookId, reviewsDialogOpen, setReviewsDialogOpen }) => (
   <>
     <List>
       {books.map(book => (

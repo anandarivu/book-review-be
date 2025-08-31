@@ -1,13 +1,12 @@
 import React from 'react';
 import { Box, TextField, Button, InputAdornment, IconButton } from '@mui/material';
-import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
 import { Add } from '@mui/icons-material';
 
 interface SearchBarProps {
   searchInput: string;
   onSearchInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  searchInputRef: React.RefObject<HTMLInputElement>;
+  searchInputRef: any;
   onAddBook: () => void;
 }
 

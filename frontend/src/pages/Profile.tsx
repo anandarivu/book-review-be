@@ -1,7 +1,7 @@
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import { Grid } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -90,6 +90,7 @@ const Profile: React.FC = () => {
         setLoading(false);
       })
       .catch((err) => {
+        console.log(err);
         setLoading(false);
       });
   }, []);
@@ -238,7 +239,7 @@ const Profile: React.FC = () => {
           <>
             <Grid container spacing={4}>
               {favorites.slice((favPage - 1) * itemsPerPage, favPage * itemsPerPage).map(book => (
-                <Grid item key={book.id} xs={12} sm={6} md={4} lg={3}>
+                <Box key={book.id} sx={{ width: { xs: '100%', sm: '50%', md: '33.33%', lg: '25%' }, p: 1 }}>
                   <BookCard
                     book={book}
                     isFavorite={true}
@@ -246,7 +247,7 @@ const Profile: React.FC = () => {
                     showFavorite={true}
                     showViewDetails={true}
                   />
-                </Grid>
+                </Box>
               ))}
             </Grid>
             {favorites.length > itemsPerPage && (

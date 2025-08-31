@@ -26,7 +26,7 @@ const AdminPanel: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const { role } = useAuthStore();
   const [newBook, setNewBook] = useState({ title: '', author: '', description: '', coverImageUrl: '', genres: '', publishedYear: '' });
-  const [editId, setEditId] = useState<number | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
   const [editBookData, setEditBookData] = useState({ title: '', author: '', description: '', coverImageUrl: '', genres: [], publishedYear: '' });
   const [loading, setLoading] = useState(true);
   const [reviewsDialogOpen, setReviewsDialogOpen] = useState(false);
