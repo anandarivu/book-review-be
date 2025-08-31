@@ -19,6 +19,7 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
+        working-directory: ./backend
 
       - name: Copy JAR to EC2
         run: |
