@@ -33,7 +33,7 @@ jobs:
       
       - name: try running which java command
         run: |
-          ssh -v -i ec2_key.pem -o StrictHostKeyChecking=no \
+          ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
             ubuntu@${{ secrets.EC2_HOST }} \
             'which java; java -version'
 
@@ -47,4 +47,4 @@ jobs:
         run: |
           ssh -v -i ec2_key.pem -o StrictHostKeyChecking=no \
             ubuntu@${{ secrets.EC2_HOST }} \
-            'pkill -f app.jar || true; java -jar /home/ubuntu/app.jar'
+            'java -jar /home/ubuntu/app.jar > /home/ubuntu/app.log 2>&1'
