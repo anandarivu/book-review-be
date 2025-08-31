@@ -41,4 +41,4 @@ jobs:
         run: |
           ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
             ubuntu@${{ secrets.EC2_HOST }} \
-            'pkill -f app.jar || true; nohup java -jar /home/ubuntu/app.jar > app.log 2>&1 &'
+            'pkill -f app.jar || true; java -jar /home/ubuntu/app.jar'
