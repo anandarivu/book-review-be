@@ -30,6 +30,12 @@ jobs:
         run: |
           scp -i ec2_key.pem -o StrictHostKeyChecking=no \
             backend/target/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app.jar
+      
+      - name: try running which java command
+        run: |
+          ssh -v -i ec2_key.pem -o StrictHostKeyChecking=no \
+            ubuntu@${{ secrets.EC2_HOST }} \
+            'which java; java -version'
 
       # - name: Install Java on EC2
       #   run: |
