@@ -19,7 +19,7 @@ export const createBook = (data: {
 }) => api.post('/books', data);
 
 // Update book (BookRequest)
-export const updateBook = (id: number, data: {
+export const updateBook = (id: string, data: {
   bookId?: string;
   title: string;
   author: string;
@@ -30,10 +30,10 @@ export const updateBook = (id: number, data: {
 }) => api.put(`/books/${id}`, data);
 
 // Delete book
-export const deleteBook = (id: number) => api.delete(`/books/${id}`);
+export const deleteBook = (id: string) => api.delete(`/books/${id}`);
 
 // Get average rating for a book
-export const getBookAverageRating = (id: number) => api.get(`/books/${id}/average-rating`);
+export const getBookAverageRating = (id: string) => api.get(`/books/${id}/average-rating`);
 
 // Get top rated books
 export const getTopRatedBooks = (params?: { page?: number; size?: number }) =>

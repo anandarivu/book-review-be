@@ -9,8 +9,8 @@ interface ProfileState {
   fetchProfile: () => Promise<void>;
   updateProfile: (data: any) => Promise<void>;
   fetchFavorites: () => Promise<void>;
-  addFavorite: (bookId: number) => Promise<void>;
-  removeFavorite: (bookId: number) => Promise<void>;
+  addFavorite: (bookId: string) => Promise<void>;
+  removeFavorite: (bookId: string) => Promise<void>;
 }
 
 export const useProfileStore = create<ProfileState>((set) => ({

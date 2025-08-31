@@ -9,7 +9,7 @@ import { getReviewsForBook } from '../api/reviews';
 interface BookListProps {
   books: any[];
   onEdit: (book: any) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
   onOpenReviews: (id: string) => void;
   selectedBookId: string | null;
   reviewsDialogOpen: boolean;

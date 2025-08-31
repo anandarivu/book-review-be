@@ -14,7 +14,7 @@ const Favorites: React.FC = () => {
     });
   }, []);
 
-  const handleRemoveFavorite = async (bookId: number) => {
+  const handleRemoveFavorite = async (bookId: string) => {
     await removeFavorite(bookId);
     getFavorites().then(res => setFavorites(res.data));
   };

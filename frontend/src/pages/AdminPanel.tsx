@@ -123,7 +123,7 @@ const AdminPanel: React.FC = () => {
     }
   };
 
-  const handleRemoveBook = async (id: number) => {
+  const handleRemoveBook = async (id: string) => {
     try {
       await removeBook(id);
       // Refresh books after delete

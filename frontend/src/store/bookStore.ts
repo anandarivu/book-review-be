@@ -6,10 +6,10 @@ interface BookState {
   selectedBook: any | null;
   loading: boolean;
   fetchBooks: () => Promise<void>;
-  fetchBook: (id: number) => Promise<void>;
+  fetchBook: (id: string) => Promise<void>;
   addBook: (data: any) => Promise<void>;
-  editBook: (id: number, data: any) => Promise<void>;
-  removeBook: (id: number) => Promise<void>;
+  editBook: (id: string, data: any) => Promise<void>;
+  removeBook: (id: string) => Promise<void>;
 }
 
 export const useBookStore = create<BookState>((set) => ({
@@ -21,7 +21,7 @@ export const useBookStore = create<BookState>((set) => ({
     const res = await getBooks();
     set({ books: res.data.content || res.data, loading: false });
   },
-  fetchBook: async (id) => {
+  fetchBook: async (id: string) => {
     set({ loading: true });
     const res = await getBook(id);
     set({ selectedBook: res.data, loading: false });
