@@ -47,4 +47,4 @@ jobs:
         run: |
           ssh -v -i ec2_key.pem -o StrictHostKeyChecking=no \
             ubuntu@${{ secrets.EC2_HOST }} \
-            'java -jar /home/ubuntu/app.jar > /home/ubuntu/app.log 2>&1'
+            'java -jar /home/ubuntu/app.jar > /home/ubuntu/app.log 2>&1 &'
