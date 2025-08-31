@@ -22,10 +22,10 @@ jobs:
       - name: Copy JAR to EC2
         run: |
           scp -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no \
-            target/*.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/app.jar
+            target/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app.jar
 
       - name: Restart backend on EC2
         run: |
           ssh -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no \
-            ec2-user@${{ secrets.EC2_HOST }} \
-            'pkill -f app.jar || true; nohup java -jar /home/ec2-user/app.jar > app.log 2>&1 &'
+            ubuntu@${{ secrets.EC2_HOST }} \
+            'pkill -f app.jar || true; nohup java -jar /home/ubuntu/app.jar > app.log 2>&1 &'
