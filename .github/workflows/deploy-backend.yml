@@ -20,14 +20,19 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
         working-directory: ./backend
+      
+      - name: Write SSH key to file
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > ec2_key.pem
+          chmod 600 ec2_key.pem
 
       - name: Copy JAR to EC2
         run: |
-          scp -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no \
+          scp -i ec2_key.pem -o StrictHostKeyChecking=no \
             target/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app.jar
 
       - name: Restart backend on EC2
         run: |
-          ssh -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no \
+          ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
             ubuntu@${{ secrets.EC2_HOST }} \
             'pkill -f app.jar || true; nohup java -jar /home/ubuntu/app.jar > app.log 2>&1 &'
