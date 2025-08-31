@@ -14,6 +14,10 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 @EnableMethodSecurity
 public class SecurityConfig {
     @Bean
+    public org.springframework.web.client.RestTemplate restTemplate() {
+        return new org.springframework.web.client.RestTemplate();
+    }
+    @Bean
     public org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter jwtAuthenticationConverter() {
         org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter converter = new org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {

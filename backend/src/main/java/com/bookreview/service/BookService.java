@@ -36,16 +36,16 @@ public class BookService {
         for (var book : favorites) {
             if (book.getGenres() != null) genres.addAll(book.getGenres());
         }
-        // If no favorites, get genres from user profile (if available)
-        if (genres.isEmpty()) {
-            var userOpt = userRepository.findByUserId(userId);
-            if (userOpt.isPresent()) {
-                var user = userOpt.get();
-                for (var book : user.getFavorites()) {
-                    if (book.getGenres() != null) genres.addAll(book.getGenres());
-                }
-            }
-        }
+        // // If no favorites, get genres from user profile (if available)
+        // if (genres.isEmpty()) {
+        //     var userOpt = userRepository.findByUserId(userId);
+        //     if (userOpt.isPresent()) {
+        //         var user = userOpt.get();
+        //         for (var book : user.getFavorites()) {
+        //             if (book.getGenres() != null) genres.addAll(book.getGenres());
+        //         }
+        //     }
+        // }
         // Find books matching these genres, excluding already favorited books
         var allBooks = bookRepository.findAll();
         var recommended = allBooks.stream()
