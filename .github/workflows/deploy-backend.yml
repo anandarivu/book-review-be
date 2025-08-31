@@ -39,6 +39,6 @@ jobs:
 
       - name: Restart backend on EC2
         run: |
-          ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
+          ssh -v -i ec2_key.pem -o StrictHostKeyChecking=no \
             ubuntu@${{ secrets.EC2_HOST }} \
             'pkill -f app.jar || true; java -jar /home/ubuntu/app.jar'
